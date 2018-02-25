@@ -1,10 +1,10 @@
 #include <stdio.h>
-#include <ncurses.h>
 #include <signal.h>
 #include <string.h>
-#include <unistd.h>
 #include <ctype.h>
 #include <time.h>
+#include "unistd.h"
+#include "ncurses.h"
 
 int current_window = 1;
 
@@ -217,6 +217,6 @@ int main(int argc, char *argv[]) {
 	sleep(1);
 
 	endwin();
-
+	
 	return(0);
 }
