@@ -1,5 +1,7 @@
 /* Linux implementation of a Windows project
-** Missing: t()/display_date_time function */
+** Missing:	t()/display_date_time
+**			remainder() to show ending medicines
+*/
 #include <stdio.h>
 #include <signal.h>
 #include <string.h>
@@ -12,6 +14,9 @@ int current_window = 1;
 
 void main_menu_builder();
 void exit_builder();
+void supplier_menu_builder();
+void customer_menu_builder();
+void medicine_menu_builder();
 
 // SIGWINCH is called when the window is resized.
 void main_winch(int sig) {
@@ -39,6 +44,45 @@ void main_menu_winch(int sig) {
 	main_menu_builder();
 }
 
+void supplier_menu_winch(int sig) {
+	signal(SIGWINCH, SIG_IGN);
+
+	// Reinitialize the window to update data structures.
+	endwin();
+	initscr();
+	clear();
+	refresh();
+
+	signal(SIGWINCH, supplier_menu_winch);
+	supplier_menu_builder();
+}
+
+void customer_menu_winch(int sig) {
+	signal(SIGWINCH, SIG_IGN);
+
+	// Reinitialize the window to update data structures.
+	endwin();
+	initscr();
+	clear();
+	refresh();
+
+	signal(SIGWINCH, customer_menu_winch);
+	customer_menu_builder();
+}
+
+void medicine_menu_winch(int sig) {
+	signal(SIGWINCH, SIG_IGN);
+
+	// Reinitialize the window to update data structures.
+	endwin();
+	initscr();
+	clear();
+	refresh();
+
+	signal(SIGWINCH, medicine_menu_winch);
+	medicine_menu_builder();
+}
+
 void exit_winch(int sig){
 	signal(SIGWINCH, SIG_IGN);
 
@@ -62,13 +106,13 @@ void top_box() {
 		mvprintw(0, i, "#");
 	}
 	for(i=0; i<5; i++){
-		mvaddstr(i, COLS-1, "#");
+		mvprintw(i, COLS-1, "#");
 	}
 	for(i=COLS-1; i>0; i--){
-		mvaddstr(4, i, "#");
+		mvprintw(4, i, "#");
 	}
 	for(i=4; i>0; i--){
-		mvaddstr(i, 0, "#");
+		mvprintw(i, 0, "#");
 	}
 
 	refresh();
@@ -79,16 +123,16 @@ void main_box(){
 	clrtobot();
 	int i;
 	for(i=0; i<COLS; i++){
-		mvaddstr(5, i, "#");
+		mvprintw(5, i, "#");
 	}
 	for(i=6; i<LINES-1; i++){
-		mvaddstr(i, COLS-1, "#");
+		mvprintw(i, COLS-1, "#");
 	}
 	for(i=COLS-1; i>0; i--){
-		mvaddstr(LINES-1, i, "#");
+		mvprintw(LINES-1, i, "#");
 	}
 	for(i=LINES-1; i>0; i--){
-		mvaddstr(i, 0, "#");
+		mvprintw(i, 0, "#");
 	}
 	refresh();
 }
@@ -102,13 +146,13 @@ void exit_builder(){
 		mvprintw(0, i, "#");
 	}
 	for(i=0; i<LINES-1; i++){
-		mvaddstr(i, COLS-1, "#");
+		mvprintw(i, COLS-1, "#");
 	}
 	for(i=COLS-1; i>0; i--){
-		mvaddstr(LINES-1, i, "#");
+		mvprintw(LINES-1, i, "#");
 	}
 	for(i=LINES-1; i>0; i--){
-		mvaddstr(i, 0, "#");
+		mvprintw(i, 0, "#");
 	}
 	refresh();
 
@@ -134,6 +178,7 @@ void main_menu_builder(){
 	main_box();
 	mvprintw(2, COLS/2 - strlen("Supplier info    Customer info    Medicine    Report    Bill    About    Exit")/2, "Supplier info    Customer info    Medicine    Report    Bill    About    Exit");
 	mvprintw(LINES/2, COLS/2 - strlen("Welcome to Medical Store")/2, "Welcome to Medical Store");
+	mvprintw(LINES / 2 + 1, COLS / 2 - strlen("Management System") / 2, "Management System");
 	refresh();
 	sleep(0.5);
 	mvprintw(LINES-2, COLS-1-1-strlen("Press first character for further Menu"), "Press first character for further Menu");
@@ -141,6 +186,7 @@ void main_menu_builder(){
 }
 
 void main_menu(){
+	/* current_windows == 1 */
 	signal(SIGWINCH, main_menu_winch);
 	main_menu_builder();
 	char ch;
@@ -181,6 +227,156 @@ void main_menu(){
 	current_window=0;
 }
 
+void supplier_menu_builder() {
+	clear();
+	top_box();
+	main_box();
+	mvprintw(2, COLS / 2 - strlen("Add    Update    List    Search    Main Menu    Exit") / 2, "Add    Update    List    Search    Main Menu    Exit");
+	mvprintw(LINES / 2, COLS / 2 - strlen("Supplier Menu") / 2, "Supplier Menu");
+	refresh();
+	sleep(0.5);
+	mvprintw(LINES - 2, COLS - 1 - 1 - strlen("Press first character for further Menu"), "Press first character for further Menu");
+	refresh();
+}
+
+void supplier_menu() {
+	/* current_window == 2 */
+	signal(SIGWINCH, supplier_menu_winch);
+	supplier_menu_builder();
+	char ch;
+	while (ch = toupper(getchar())) {
+		switch (ch) {
+		case 'A':
+			current_window = 21;
+			return;
+		case 'U':
+			current_window = 22;
+			return;
+		case 'L':
+			current_window = 23;
+			return;
+		case 'S':
+			current_window = 24;
+			return;
+		case 'M':
+			current_window = 1;
+			return;
+		case 'E':
+			if (exiter()) {
+				supplier_menu_builder();
+			}
+			else {
+				return;
+			}
+			break;
+		default:
+			mvprintw(LINES - 2, COLS - 1 - 1 - strlen("Plese Enter right character ONLY (A,U,L,S,M,E)"), "Plese Enter right character ONLY (A,U,L,S,M,E)");
+			refresh();
+			break;
+		}
+	}
+}
+
+void customer_menu_builder() {
+	clear();
+	top_box();
+	main_box();
+	mvprintw(2, COLS / 2 - strlen("Add    Update    List    Search    Main Menu    Exit") / 2, "Add    Update    List    Search    Main Menu    Exit");
+	mvprintw(LINES / 2, COLS / 2 - strlen("Customer Menu") / 2, "Customer Menu");
+	refresh();
+	sleep(0.5);
+	mvprintw(LINES - 2, COLS - 1 - 1 - strlen("Press first character for further Menu"), "Press first character for further Menu");
+	refresh();
+}
+
+void customer_menu() {
+	/* current_window == 3 */
+	signal(SIGWINCH, customer_menu_winch);
+	customer_menu_builder();
+	char ch;
+	while (ch = toupper(getchar())) {
+		switch (ch) {
+		case 'A':
+			current_window = 31;
+			return;
+		case 'U':
+			current_window = 32;
+			return;
+		case 'L':
+			current_window = 33;
+			return;
+		case 'S':
+			current_window = 34;
+			return;
+		case 'M':
+			current_window = 1;
+			return;
+		case 'E':
+			if (exiter()) {
+				customer_menu_builder();
+			}
+			else {
+				return;
+			}
+			break;
+		default:
+			mvprintw(LINES - 2, COLS - 1 - 1 - strlen("Plese Enter right character ONLY (A,U,L,S,M,E)"), "Plese Enter right character ONLY (A,U,L,S,M,E)");
+			refresh();
+			break;
+		}
+	}
+}
+
+void medicine_menu_builder() {
+	clear();
+	top_box();
+	main_box();
+	mvprintw(2, COLS / 2 - strlen("Purchase    Sell    In Stock    List    Main    Exit") / 2, "Purchase    Examination    In Stock    Search    Main    Exit");
+	mvprintw(LINES / 2, COLS / 2 - strlen("Medicine Menu") / 2, "Medicine Menu");
+	refresh();
+	sleep(0.5);
+	mvprintw(LINES - 2, COLS - 1 - 1 - strlen("Press first character for further Menu"), "Press first character for further Menu");
+	refresh();
+}
+
+void medicine_menu() {
+	/* current_window == 4 */
+	signal(SIGWINCH, medicine_menu_winch);
+	medicine_menu_builder();
+	char ch;
+	while (ch = toupper(getchar())) {
+		switch (ch) {
+		case 'P':
+			current_window = 41;
+			return;
+		case 'S':
+			current_window = 42;
+			return;
+		case 'I':
+			current_window = 43;
+			return;
+		case 'L':
+			current_window = 44;
+			return;
+		case 'M':
+			current_window = 1;
+			return;
+		case 'E':
+			if (exiter()) {
+				medicine_menu_builder();
+			}
+			else {
+				return;
+			}
+			break;
+		default:
+			mvprintw(LINES - 2, COLS - 1 - 1 - strlen("Plese Enter right character ONLY (P,S,I,L,M,E)"), "Plese Enter right character ONLY (P,S,I,L,M,E)");
+			refresh();
+			break;
+		}
+	}
+}
+
 int main(int argc, char *argv[]) {
 	initscr();
 	refresh();
@@ -192,6 +388,15 @@ int main(int argc, char *argv[]) {
 	while(current_window != 0){
 		if(current_window == 1){
 			main_menu();
+		}
+		else if (current_window == 2) {
+			supplier_menu();
+		}
+		else if (current_window == 3) {
+			customer_menu();
+		}
+		else if (current_window == 4) {
+			medicine_menu();
 		}
 	}
 
