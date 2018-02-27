@@ -1,3 +1,5 @@
+/* Linux implementation of a Windows project
+** Missing: t()/display_date_time function */
 #include <stdio.h>
 #include <signal.h>
 #include <string.h>
@@ -10,7 +12,6 @@ int current_window = 1;
 
 void main_menu_builder();
 void exit_builder();
-void display_date_time();
 
 // SIGWINCH is called when the window is resized.
 void main_winch(int sig) {
@@ -89,23 +90,6 @@ void main_box(){
 	for(i=LINES-1; i>0; i--){
 		mvaddstr(i, 0, "#");
 	}
-	refresh();
-	display_date_time();
-}
-
-void display_date_time(void) {
-	//struct date d;
-	//struct time t;
-
-	time_t t = time(0);   // get time now
-	struct tm * now = localtime(&t);
-	//getdate(&d);
-	//gettime(&t);
-	char *dat, *tim;
-	mvprintw(5, COLS-1-strlen(dat), "Scritti: %d\n", sprintf(NULL, "Date: %d-%d-%d", now->tm_mday, now->tm_mon, now->tm_year));
-//	sprintf(tim, "Time: %d:%d:%d", now->tm_mday, now->tm_mon, now->tm_year);
-//	mvprintw(5, COLS-1-strlen(dat), dat);
-//	mvprintw(6, COLS-1-strlen(tim), tim);
 	refresh();
 }
 

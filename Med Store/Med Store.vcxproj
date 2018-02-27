@@ -61,7 +61,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
-    <ClCompile Include="resize.c" />
+    <ClCompile Include="MSMS.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ncurses.h" />
