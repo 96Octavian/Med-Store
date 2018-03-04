@@ -262,3 +262,5 @@ __pycache__/
 
 unistd.h
 ncurses.h
+useful.*
+*.dat

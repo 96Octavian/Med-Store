@@ -2,9 +2,23 @@
 
 #include <varargs.h>
 
+extern WINDOW *stdscr;
+
 #define COLS	0
 
 #define LINES	0
+
+#define bool int
+
+#define TRUE 1
+
+#define FALSE 0
+
+#define KEY_UP 0
+
+#define KEY_DOWN 1
+
+#define KEY_BACKSPACE 2
 
 typedef WINDOW;
 
@@ -37,3 +51,9 @@ int mvprintw(int y, int x, char *fmt, ...);
 int mvwprintw(WINDOW *win, int y, int x, char *fmt, ...);
 
 int vwprintw(WINDOW *win, char *fmt, va_list);
+
+int keypad(WINDOW *win, bool bf);
+
+void getyx(WINDOW *win, int y, int x);
+
+int addch(const char ch);
