@@ -751,19 +751,7 @@ void search_by_billno() {
 		}
 		free(buf);
 	}
-
-	/*		char buf[256];
-	while(fscanf(ptrbill,"%s %s %s %d %f %f %d %d %d",bil.billno,bil.cname,bil.medinumber,bil.mediname,&bil.medi_qty,&bil.medi_rate,&bil.day,&bil.month,&bil.year)!=EOF) {
-	if (strcmp(query, bil.billno) == 0) {
-	mvprintw(i, 4, "%s", bil.medinumber);
-	mvprintw(i, 24, "%s", bil.mediname);
-	mvprintw(i, 51, "%d", bil.medi_qty);
-	mvprintw(i, 68, "%.2f", bil.medi_rate);
-	mvprintw(i, 86, "%.2f", bil.medi_rate * bil.medi_qty);
-	i = i + 2;
-	refresh();
-	}
-	}*/
+	query[0] = '\0';
 	while ((ch = getch()) != 27) {}
 }
 
