@@ -57,3 +57,81 @@ int keypad(WINDOW *win, bool bf);
 void getyx(WINDOW *win, int y, int x);
 
 int addch(const char ch);
+
+int border(char ls, char rs, char ts, char bs, char tl, char tr, char bl, char br);
+
+int wborder(WINDOW *win, char ls, char rs, char ts, char bs, char tl, char tr, char bl, char br);
+
+int box(WINDOW *win, char verch, char horch);
+
+int hline(char ch, int n);
+
+int whline(WINDOW *win, char ch, int n);
+
+int vline(char ch, int n);
+
+int wvline(WINDOW *win, char ch, int n);
+
+mvhline(int y, int x, char ch, int n);
+
+mvwhline(WINDOW *, int y, int x, char ch, int n);
+
+int mvvline(int y, int x, char ch, int n);
+
+int mvwvline(WINDOW *, int y, int x, char ch, int n);
+
+int cbreak(void);
+
+int nocbreak(void);
+
+int echo(void);
+
+int noecho(void);
+
+int halfdelay(int tenths);
+
+int intrflush(WINDOW *win, bool bf);
+
+int keypad(WINDOW *win, bool bf);
+
+int meta(WINDOW *win, bool bf);
+
+int nodelay(WINDOW *win, bool bf);
+
+int raw(void);
+
+int noraw(void);
+
+void noqiflush(void);
+
+void qiflush(void);
+
+int notimeout(WINDOW *win, bool bf);
+
+void timeout(int delay);
+
+void wtimeout(WINDOW *win, int delay);
+
+int typeahead(int fd);
+
+WINDOW *newwin(int nlines, int ncols, int begin_y, int begin_x);
+
+int delwin(WINDOW *win);
+
+int mvwin(WINDOW *win, int y, int x);
+
+WINDOW *subwin(WINDOW *orig, int nlines, int ncols, int begin_y, int begin_x);
+
+WINDOW *derwin(WINDOW *orig, int nlines, int ncols, int begin_y, int begin_x);
+
+int mvderwin(WINDOW *win, int par_y, int par_x);
+
+WINDOW *dupwin(WINDOW *win);
+
+void wsyncup(WINDOW *win);
+
+int syncok(WINDOW *win, bool bf);
+
+void wcursyncup(WINDOW *win);
+
+void wsyncdown(WINDOW *win);

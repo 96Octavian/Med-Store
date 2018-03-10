@@ -264,3 +264,4 @@ unistd.h
 ncurses.h
 useful.*
 *.dat
+bak.*
