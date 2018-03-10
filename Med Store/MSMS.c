@@ -49,7 +49,7 @@ void main_winch(int sig) {
 
 	// Reinitialize the window to update data structures.
 	endwin();
-	current = initscr(); noecho(); keypad(current, TRUE);
+	current = initscr(); noecho(); keypad(stdscr, TRUE);
 	clear();
 	refresh();
 
@@ -61,7 +61,7 @@ void main_menu_winch(int sig) {
 
 	// Reinitialize the window to update data structures.
 	endwin();
-	current = initscr(); noecho(); keypad(current, TRUE);
+	current = initscr(); noecho(); keypad(stdscr, TRUE);
 	clear();
 	refresh();
 
@@ -74,7 +74,7 @@ void supplier_menu_winch(int sig) {
 
 	// Reinitialize the window to update data structures.
 	endwin();
-	current = initscr(); noecho(); keypad(current, TRUE);
+	current = initscr(); noecho(); keypad(stdscr, TRUE);
 	clear();
 	refresh();
 
@@ -87,7 +87,7 @@ void customer_menu_winch(int sig) {
 
 	// Reinitialize the window to update data structures.
 	endwin();
-	current = initscr(); noecho(); keypad(current, TRUE);
+	current = initscr(); noecho(); keypad(stdscr, TRUE);
 	clear();
 	refresh();
 
@@ -100,7 +100,7 @@ void medicine_menu_winch(int sig) {
 
 	// Reinitialize the window to update data structures.
 	endwin();
-	current = initscr(); noecho(); keypad(current, TRUE);
+	current = initscr(); noecho(); keypad(stdscr, TRUE);
 	clear();
 	refresh();
 
@@ -113,7 +113,7 @@ void report_menu_winch(int sig) {
 
 	// Reinitialize the window to update data structures.
 	endwin();
-	current = initscr(); noecho(); keypad(current, TRUE);
+	current = initscr(); noecho(); keypad(stdscr, TRUE);
 	clear();
 	refresh();
 
@@ -126,7 +126,7 @@ void about_menu_winch(int sig) {
 
 	// Reinitialize the window to update data structures.
 	endwin();
-	current = initscr(); noecho(); keypad(current, TRUE);
+	current = initscr(); noecho(); keypad(stdscr, TRUE);
 	clear();
 	refresh();
 
@@ -139,7 +139,7 @@ void bill_menu_winch(int sig) {
 
 	// Reinitialize the window to update data structures.
 	endwin();
-	current = initscr(); noecho(); keypad(current, TRUE);
+	current = initscr(); noecho(); keypad(stdscr, TRUE);
 	clear();
 	refresh();
 
@@ -152,11 +152,11 @@ void search_bill_winch(int sig) {
 
 	// Reinitialize the window to update data structures.
 	endwin();
-	current = initscr(); noecho(); keypad(current, TRUE);
+	current = initscr(); noecho(); keypad(stdscr, TRUE);
 	clear();
 	refresh();
 
-	signal(SIGWINCH, bill_menu_winch);
+	signal(SIGWINCH, search_bill_winch);
 	search_bill_builder();
 }
 
@@ -165,7 +165,7 @@ void exit_winch(int sig) {
 
 	// Reinitialize the window to update data structures.
 	endwin();
-	current = initscr(); noecho(); keypad(current, TRUE);
+	current = initscr(); noecho(); keypad(stdscr, TRUE);
 	clear();
 	refresh();
 
@@ -426,7 +426,7 @@ void medicine_menu_builder() {
 	clear();
 	top_box();
 	main_box();
-	mvprintw(2, COLS / 2 - strlen("Purchase    Sell    In Stock    List    Main    Exit") / 2, "Purchase    Examination    In Stock    Search    Main    Exit");
+	mvprintw(2, COLS / 2 - strlen("Purchase    Sell    In Stock    List    Main    Exit") / 2, "Purchase    Sell    In Stock    List    Main    Exit");
 	mvprintw(LINES / 2, COLS / 2 - strlen("Medicine Menu") / 2, "Medicine Menu");
 	refresh();
 	sleep(0.5);
@@ -630,7 +630,7 @@ void search_bill() { // Called void bill() in original file
 	int ch, day, month, year;
 	query[i] = '\0';
 	while ((ch = getch()) != 27) {
-		getyx(current, y, x);
+		getyx(stdscr, y, x);
 
 		if (ch == 10) {
 			if (strlen(query) == 0) {
@@ -665,6 +665,7 @@ void search_bill() { // Called void bill() in original file
 			query[i] = '\0';
 			addch(ch);
 
+			// This bit removes the "Empty field" warning if set
 			move(15, 42);
 			clrtoeol();
 			mvprintw(15, COLS - 1, "#");
@@ -672,6 +673,8 @@ void search_bill() { // Called void bill() in original file
 
 		}
 		else {
+			move(y, x);
+			refresh();
 			if (ch == KEY_UP) {
 				move(y, x);
 				refresh();
@@ -679,6 +682,7 @@ void search_bill() { // Called void bill() in original file
 					continue;
 				}
 				move(y - 3, x);
+				refresh();
 			}
 			else if (ch == KEY_DOWN) {
 				move(y, x);
@@ -687,6 +691,7 @@ void search_bill() { // Called void bill() in original file
 					continue;
 				}
 				move(y + 3, x);
+				refresh();
 			}
 			else if (ch == KEY_BACKSPACE) {
 				move(y, x);
@@ -697,12 +702,14 @@ void search_bill() { // Called void bill() in original file
 				move(y, x - 1);
 				addch(' ');
 				move(y, x - 1);
+				refresh();
 				i--;
 				query[i] = '\0';
 			}
 		}
 	}
 	if (ch == 27) {
+		query[0] = '\0';
 		current_window = 6;
 		return;
 	}
@@ -712,6 +719,7 @@ void search_bill() { // Called void bill() in original file
 	current_window = 6;
 	return;
 }
+
 void search_by_billno() {
 	signal(SIGWINCH, SIG_IGN);
 	int ch, i;
@@ -756,7 +764,7 @@ void search_by_billno() {
 }
 
 int main(int argc, char *argv[]) {
-	current = initscr(); noecho(); keypad(current, TRUE);
+	current = initscr(); noecho(); keypad(stdscr, TRUE);
 	refresh();
 	// COLS/LINES are now set
 
