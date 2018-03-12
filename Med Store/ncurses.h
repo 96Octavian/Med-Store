@@ -4,6 +4,8 @@
 
 extern WINDOW *stdscr;
 
+extern WINDOW *curscr;
+
 #define COLS	0
 
 #define LINES	0
@@ -135,3 +137,43 @@ int syncok(WINDOW *win, bool bf);
 void wcursyncup(WINDOW *win);
 
 void wsyncdown(WINDOW *win);
+
+int refresh(void);
+
+int wrefresh(WINDOW *win);
+
+int wnoutrefresh(WINDOW *win);
+
+int doupdate(void);
+
+int redrawwin(WINDOW *win);
+
+int wredrawln(WINDOW *win, int beg_line, int num_lines);
+
+int erase(void);
+
+int werase(WINDOW *win);
+
+int clear(void);
+
+int wclear(WINDOW *win);
+
+int clrtobot(void);
+
+int wclrtobot(WINDOW *win);
+
+int clrtoeol(void);
+
+int wclrtoeol(WINDOW *win);
+
+int touchwin(WINDOW *win);
+
+int touchline(WINDOW *win, int start, int count);
+
+int untouchwin(WINDOW *win);
+
+int wtouchln(WINDOW *win, int y, int n, int changed);
+
+int is_linetouched(WINDOW *win, int line);
+
+int is_wintouched(WINDOW *win);
