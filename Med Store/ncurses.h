@@ -177,3 +177,5 @@ int wtouchln(WINDOW *win, int y, int n, int changed);
 int is_linetouched(WINDOW *win, int line);
 
 int is_wintouched(WINDOW *win);
+
+int curs_set(int visibility);
